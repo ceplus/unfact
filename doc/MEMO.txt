@@ -1,0 +1,107 @@
+
+* basic
++ truncase filename on the log
+- port to linux
+- log supression
+- smoke test for data race 
+  - simple thread abstraction
+- thread local for null platform
+- hashtable for emulating tls
+- introduce rb-tree color-bit
+- backoff on spinlock
+- make set_tree copiable
+- ordered single linked list for tree_set replacement
+- heavy lock
+
+* heap profiler
+- rename and move accumulation_formatter_t -> aggregative_tracing_formatter(?)
+  - accumulation_formatter_t is bad name. we should capture its property using good name...
+  - generalize and remove final() dependency.
+- prune empty tree nodes
+- formatting utility (extras)
+- pretty formatting with ","
+- support alerting
+- support dynamic enabling/disabling per thread
+
+
+* clock profiler
+> clock_t for each platform
+  + windows
+  - linux
++ non-scoepd time
+  + separate pure scope from counting scope
+- clear subtree
+- skip empty node on formatting
+- generalize flat_tracing_formatter_t
+- app integraton trial
+- support alerting
+- does tests using tick counts
+
+* misc
+- align var name 'other' -> 'that'
+- try read-write lock and compare the performance
+- disable/enable profiler
+  - depth-based control
+- put license term
+
+------
+
+DONE:
+* basic
++ make default page size customizable
+. make iterator lockable (concurrent_iterator)
+
+* heap profiler
++ add invariant checker for rb-tree
++ tree_set::node
++ extract node as as intrusive pseudo-container
++ tree_set
+. tree_map
++ arena_t::swap()
+. hash_set
++ set_tree
++ static_string_t
++ call tracer (call tree)
++ heap_tracer
+  + accumulated consumption of subtree
++ heap_tracing_formatter_t
++ rename subtree_begin -> begin_at
+> make MT ready
+  + lock_treat
+  + arena
+  + tree_set
+  + set_tree
+  + tree_trader
+  + accumulation_count
+  . accumulation_formatter
+  + heap_tracer
++ make to_iterator() and to_ticket() static
+. non intrusive lock_scope ?
+  . goal: for iterator
++ provide lock_scope_type for all lockable object
+  (add to Lockable concept requirements)
++ eliminate Area type parameter
+  + tree_set_skeleton
+  + tree_set
+  + set_tree
+  + tree_tracer
++ make arena to enforce alignment restriction
+. make tree_tracer::push() accept char*, not only static_string
+. synchronizable_t for lock with least sig bit
+  . use as tree_set_skeleton::m_root
+  -> too tricky. and node count of set_tree wouldn't go so large.
+     rbtree node count is more serious conern: it is allocated per 
+     heap block.
++ thread specific data
++ extra macros
+. introduce 'detail' namespace
++ cleanup/organize config definitions
+  to ensure customizability:
+  + backdoor_allocator
+  + log
++ enhance arena debug facility
+  + clear 0xdeadbeaf
+
+* clock profiler
++ sticky
++ reset (zero-clear)
