@@ -1,3 +1,4 @@
+LICENSE = <<EOF
 /*
  * Copyright (c) 2008 Community Engine Inc.
  * 
@@ -22,47 +23,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+EOF
 
-#ifndef ONTREE_EVENT_HPP
-#define ONTREE_EVENT_HPP
+file_names = ARGV
 
-#include <ontree/base.hpp>
-
-ONT_NAMESPACE_BEGIN
-
-enum event_e
-{
-  event_object_begin,
-  event_object_end,
-  event_object_key,
-  event_array_begin,
-  event_array_end,
-  event_number,
-  event_string,
-  event_predicate,
-  event_null,
-  event_begin,
-  event_end,
-  event_value, // used inside writer, and never appers elsewhere
-  events
-};
-
-enum scope_e
-{
-  scope_object,
-  scope_array,
-  scopes
-};
-
-ONT_NAMESPACE_END
-
-#endif//ONTREE_EVENT_HPP
-
-/* -*-
-   Local Variables:
-   mode: c++
-   c-tab-always-indent: t
-   c-indent-level: 2
-   c-basic-offset: 2
-   End:
-   -*- */
+file_names.each do |name|
+  body = open(name){|f| f.read }
+  unless body =~ /Copyright/
+    body = LICENSE + body
+    open(name, "w") { |f| f.write(body) }
+  end
+end
