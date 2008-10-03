@@ -6,25 +6,39 @@
  */
 
 void test_unit(); // in unit_test.cpp
-void test_memory();// in memory_test.cpp
-void test_arena(); // in arena_test.cpp
-void test_tree_set(); // in tree_set_test.cpp
-void test_red_black(); // in red_black_test.cpp
-void test_base(); // in base_test.cpp
-void test_algorithm(); // in algorithm_test.cpp
-void test_set_tree(); // in set_tree_test.cpp
-void test_static_string(); // in static_string_test.cpp
-void test_tracing(); // in tracing_test.cpp
-void test_heap_tracer(); // in heap_tracer_test.cpp
-void test_concurrent(); // in concurrent_test.cpp
-void test_tls(); // in tls_test.cpp
-void test_heap_tracing_annotation(); // in heap_tracing_annotation_test.cpp
-void test_sticky_tracer(); // in sticky_tracer_test.cpp
+
+/* unfact */
+void test_memory();// in unfact_memory_test.cpp
+void test_arena(); // in unfact_arena_test.cpp
+void test_tree_set(); // in unfact_tree_set_test.cpp
+void test_red_black(); // in unfact_red_black_test.cpp
+void test_base(); // in unfact_base_test.cpp
+void test_algorithm(); // in unfact_algorithm_test.cpp
+void test_set_tree(); // in unfact_set_tree_test.cpp
+void test_static_string(); // in unfact_static_string_test.cpp
+void test_tracing(); // in unfact_tracing_test.cpp
+void test_heap_tracer(); // in unfact_heap_tracer_test.cpp
+void test_concurrent(); // in unfact_concurrent_test.cpp
+void test_tls(); // in unfact_tls_test.cpp
+void test_heap_tracing_annotation(); // in unfact_heap_tracing_annotation_test.cpp
+void test_sticky_tracer(); // in unfact_sticky_tracer_test.cpp
+
+/* ontree */
+void test_reader(); // in reader_test.cpp
+void test_tree(); // in tree_test.cpp
+void test_builder();  // in builder_test.cpp
+void test_writer(); // in writer_test.cpp
+void test_generator(); // in generator_test.cpp
+void test_var(); // in var_test.cpp
+void test_find(); // in find_test.cpp
+void hello_ontree(); // in hello_ontree.cpp
 
 int main(int /*argc*/, char* /*argv*/[])
 {
-  test_base();
   test_unit();
+
+  /* unfact */
+  test_base();
   test_memory();
   test_algorithm();
   test_arena();
@@ -38,6 +52,17 @@ int main(int /*argc*/, char* /*argv*/[])
   test_tls();
   test_heap_tracing_annotation();
   test_sticky_tracer();
+
+  /* ontree */
+  test_reader();
+  test_tree();
+  test_builder();
+  test_writer();
+  test_generator();
+  test_var();
+  test_find();
+  hello_ontree();
+  
   return 0;
 }
 
