@@ -154,6 +154,19 @@ void test_tree_array_iterator()
   assert(i == a->end());
 }
 
+void test_tree_copy_with_text()
+{
+  tree_t* t0 = new tree_t();
+
+  t0->insert_leaf(t0->root(), "foo", "bar");
+  tree_t t1(*t0);
+
+  delete t0; // to release internal storage
+
+  assert("foo" == t1.root()->begin().name());
+  assert("bar" == std::string(child_cast<string_t>(t1.root()->begin())->value().c_str()));
+}
+
 void test_tree()
 {
   test_zone_hello();
@@ -161,6 +174,7 @@ void test_tree()
   test_tree_hello();
   test_tree_object_iterator();
   test_tree_array_iterator();
+  test_tree_copy_with_text();
 }
 
 /* -*-

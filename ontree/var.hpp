@@ -43,6 +43,8 @@ public:
 
   type_e type() const { return m_node ? m_node->type() : type_undefined; } 
   bool defined() const { return 0 != m_node; }
+  bool string_p() const { return type() == type_string; }
+  bool number_p() const { return type() == type_number; }
 
   var_t operator[](const char* str) const
   {
@@ -78,6 +80,18 @@ public:
   {
 	assert(type_number == type());
 	return node_cast<number_t>(m_node)->value();
+  }
+
+  object_t* to_object() const
+  {
+	assert(type_object == type());
+	return node_cast<object_t>(m_node);
+  }
+
+  array_t* to_areray() const
+  {
+	assert(type_array == type());
+	return node_cast<array_t>(m_node);
   }
 
   std::string name() const

@@ -281,16 +281,19 @@ inline T* node_cast(node_t* node)
 class tree_t
 {
 public:
-  tree_t(size_t page_size=zone_t::default_page_size)
+  explicit tree_t(size_t page_size=zone_t::default_page_size)
 	: m_zone(page_size), m_root(0), m_size(1) {}
 
   tree_t(const tree_t& that)
 	: m_zone(that.page_size()), m_root(0), m_size(1)
   {
-	for (member_iterator_t i = that.root()->begin();
-		 i != that.root()->end(); ++i) {
-	  insert_subtree(root(), i.name().c_str(), i.node());
-	}
+	insert_children(root(), that.root());
+  }
+
+  explicit tree_t(const tree_t& that, const object_t* that_child)
+	: m_zone(that.page_size()), m_root(0), m_size(1)
+  {
+	insert_children(root(), that_child);
   }
 
   const tree_t& operator=(const tree_t& that)
@@ -440,7 +443,6 @@ public:
 
   size_t page_size() const { return m_zone.page_size(); }
 
-public: // for test
   void insert_subtree(object_t* dst_parent, const char* name, node_t* src)
   {
 	switch (src->type()) {
@@ -459,7 +461,9 @@ public: // for test
 	  } 
 	}   break;
 	case type_string:
-	  insert_leaf(dst_parent, new_text(name), node_cast<string_t>(src)->value());
+	  // make copy of text_t instead of share storage instance...
+	  insert_leaf(dst_parent, new_text(name), 
+				  new_text(node_cast<string_t>(src)->value().c_str()));
 	  break;
 	case type_number:
 	  insert_leaf(dst_parent, new_text(name), node_cast<number_t>(src)->value());
@@ -508,6 +512,15 @@ public: // for test
 	default:
 	  ONT_SHOULD_NOT_BE_REACHED();
 	  break;
+	}
+  }
+
+public: // for test
+  void insert_children(object_t* src_parent, const object_t* dst_parent)
+  {
+	for (member_iterator_t i = dst_parent->begin();
+		 i != dst_parent->end(); ++i) {
+	  insert_subtree(src_parent, i.name().c_str(), i.node());
 	}
   }
 

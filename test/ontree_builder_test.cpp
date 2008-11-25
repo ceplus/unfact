@@ -56,10 +56,23 @@ void test_tree_copy()
   assert(t2.size() == t3.size());
 }
 
+void test_tree_copy_partial()
+{
+  std::string src_str = "{\"foo\": {\"hoge\": 0, \"ika\": [1, 2, {\"foo\":\"bar\"}]}}";
+  builder_tester_t bt_src(src_str.c_str());
+  tree_t dst_tree(bt_src.tree(), node_cast<object_t>((bt_src.tree().root()->find("foo").node())));
+
+  assert(2 == dst_tree.root()->size());
+  assert(dst_tree.root()->end() != dst_tree.root()->find("hoge"));
+  assert(dst_tree.root()->end() != dst_tree.root()->find("ika"));
+  assert(dst_tree.root()->end() == dst_tree.root()->find("foo"));
+}
+
 void test_builder()
 {
   test_builder_hello();
   test_tree_copy();
+  test_tree_copy_partial();
 }
 
 /* -*-

@@ -54,6 +54,11 @@ public:
 
   finder_t(node_t* here) : m_root(here) {}
 
+  static bool acceptable_obj_name_p(char ch)
+  {
+	return isalnum(ch) || '_' == ch;
+  }
+
   static path_t read_path(const_range_t& str)
   {
 	path_t ret;
@@ -69,10 +74,10 @@ public:
 	  } 
 	}
 
-	if (isalnum(str.at(0))) {
+	if (acceptable_obj_name_p(str.at(0))) {
 	  size_t i = 1;
 	  for (/* */; i < str.size(); ++i) {
-		if (!isalnum(str.at(i))) {
+		if (!acceptable_obj_name_p(str.at(i))) {
 		  break;
 		}
 	  }

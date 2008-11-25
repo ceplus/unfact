@@ -80,6 +80,12 @@ void test_fidner_read_path_hello()
   assert(p3.u.index == 2);
   assert(p3.left.str() == ".bar");
 
+  // should accept "_"
+  finder_t::path_t p4 = finder_t::read_path("foo_bar");
+  assert(p4.type == type_object);
+  assert(std::string(p4.u.name.str, p4.u.name.size) == "foo_bar");
+  assert(p4.left.str() == "");
+
 }
 
 void test_find()

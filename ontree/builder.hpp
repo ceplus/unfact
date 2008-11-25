@@ -174,6 +174,15 @@ inline error_e build_tree(tree_t* tree, const char* str)
   return build_tree(tree, str, strlen(str));
 }
 
+// for testing
+inline tree_t build_tree(const char* str)
+{
+  tree_t t;
+  error_e err = build_tree(&t, str);
+  assert(is_ok(err));
+  return t;
+}
+
 ONT_NAMESPACE_END
 
 #endif//ONTREE_BUILDER_HPP

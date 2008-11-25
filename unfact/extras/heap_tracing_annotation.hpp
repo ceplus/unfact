@@ -64,6 +64,25 @@ public:
 		return m_tracer.trace_deallocated(reinterpret_cast<byte_t*>(ptr));
 	}
 
+	void report(const char* file, int line)
+	{
+		char buf[128];
+		accumulative_heap_tracing_formatter_t formatter(&(m_tracer.tracer()), buf, 128, root());
+		while (!formatter.atend()) {
+			UF_TRACE_X(file, line, (buf));
+			formatter.increment();
+		}
+	}
+
+	void assert_no_leakage(const char* file, int line)
+	{
+		if (0 < m_tracer.size()) {
+			UF_TRACE_X(file, line, ("Found Memory Leak!:"));
+			report(file, line);
+			UF_ASSERT_X(file, line, false);
+		}
+	}
+
 private:
 	allocator_type m_allocator;
 	tracer_type m_tracer;
@@ -79,18 +98,6 @@ typedef default_heap_tracing_annotation_type::scope_type
         default_heap_tracing_annotation_scope_t;
 typedef default_heap_tracing_annotation_type::disjoint_type
         default_heap_tracing_annotation_disjoint_t;
-
-template<size_t StorageID, class Allocator>
-inline void
-report_heap_tracing_annotation(const heap_tracing_annotation_t<StorageID, Allocator>& annot)
-{
-	char buf[128];
-	accumulative_heap_tracing_formatter_t formatter(&(annot.tracer().tracer()), buf, 128, annot.root());
-	while (!formatter.atend()) {
-		UF_TRACE((buf));
-		formatter.increment();
-	}
-}
 
 UNFACT_NAMESPACE_EXTRAS_END
 
@@ -111,7 +118,8 @@ UNFACT_NAMESPACE_EXTRAS_END
 # define UFX_HEAP_TRACE_DECLARE_X(name) extern unfact::extras::default_heap_tracing_annotation_context_t name
 # define UFX_HEAP_TRACE_MALLOC_X(name, ptr, sz)  ((name.good()) ? name->trace_allocated(ptr, sz) : ptr)
 # define UFX_HEAP_TRACE_FREE_X(name, ptr) if (name.good()) name->trace_deallocated(ptr)
-# define UFX_HEAP_TRACE_REPORT_X(name) if (name.good()) report_heap_tracing_annotation(*(name.self))
+# define UFX_HEAP_TRACE_REPORT_X(name) if (name.good()) name->report(__FILE__, __LINE__)
+# define UFX_HEAP_TRACE_ASSERT_NO_LEAKAGE_X(name) if (name.good()) name->assert_no_leakage(__FILE__, __LINE__)
 #else
 # define UFX_HEAP_TRACE_DEFINE_X(name) ((void)0)
 # define UFX_HEAP_TRACE_INIT_X(name) ((void)0)
@@ -129,6 +137,7 @@ UNFACT_NAMESPACE_EXTRAS_END
 # define UFX_HEAP_TRACE_FREE_X(name, ptr) ((void)0)
 # define UFX_HEAP_TRACE_TRACER_X(name) (0)
 # define UFX_HEAP_TRACE_REPORT_X(name) ((void)0)
+# define UFX_HEAP_TRACE_ASSERT_NO_LEAKAGE_X(name) ((void)0)
 #endif
 
 #define UFX_HEAP_TRACE_NAME g_ufx_hta_context
@@ -148,6 +157,7 @@ UNFACT_NAMESPACE_EXTRAS_END
 #define UFX_HEAP_TRACE_FREE(ptr) UFX_HEAP_TRACE_FREE_X(UFX_HEAP_TRACE_NAME, ptr) 
 #define UFX_HEAP_TRACE_TRACER() UFX_HEAP_TRACE_TRACER_X(UFX_HEAP_TRACE_NAME)
 #define UFX_HEAP_TRACE_REPORT() UFX_HEAP_TRACE_REPORT_X(UFX_HEAP_TRACE_NAME)
+#define UFX_HEAP_TRACE_ASSERT_NO_LEAKAGE() UFX_HEAP_TRACE_ASSERT_NO_LEAKAGE_X(UFX_HEAP_TRACE_NAME)
 
 #endif//UNFACT_EXTRAS_HEAP_TRACING_ANNOTATION_HPP
 

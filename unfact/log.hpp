@@ -29,15 +29,22 @@
 #include <unfact/types.hpp>
 #include <stdarg.h>
 
-#define UF_TRACE(msg) unfact::log_print_t(unfact::log_level_trace, __FILE__, __LINE__) msg
-#define UF_ALERT(msg) unfact::log_print_t(unfact::log_level_alert, __FILE__, __LINE__) msg
-#define UF_ERROR(msg) unfact::log_print_t(unfact::log_level_error, __FILE__, __LINE__) msg
-#define UF_FATAL(msg) unfact::log_print_t(unfact::log_level_fatal, __FILE__, __LINE__) msg
+
+#define UF_TRACE_X(file, line, msg) unfact::log_print_t(unfact::log_level_trace, file, line) msg
+#define UF_ALERT_X(file, line, msg) unfact::log_print_t(unfact::log_level_alert, file, line) msg
+#define UF_ERROR_X(file, line, msg) unfact::log_print_t(unfact::log_level_error, file, line) msg
+#define UF_FATAL_X(file, line, msg) unfact::log_print_t(unfact::log_level_fatal, file, line) msg
+#define UF_TRACE(msg) UF_TRACE_X(__FILE__, __LINE__, msg)
+#define UF_ALERT(msg) UF_ALERT_X(__FILE__, __LINE__, msg)
+#define UF_ERROR(msg) UF_ERROR_X(__FILE__, __LINE__, msg)
+#define UF_FATAL(msg) UF_FATAL_X(__FILE__, __LINE__, msg)
 
 #ifdef UF_NDEBUG
+# define UF_ASSERT_X(cond) (true)
 # define UF_ASSERT(cond) (true)
 #else
-# define UF_ASSERT(cond) ((cond) || (UF_FATAL(("assertion failed!:" #cond)), true))
+# define UF_ASSERT_X(file, line, cond) ((cond) || (UF_FATAL_X(file, line, ("assertion failed!:" #cond)), true))
+# define UF_ASSERT(cond) UF_ASSERT_X(__FILE__, __LINE__, cond)
 #endif
 
 /*
