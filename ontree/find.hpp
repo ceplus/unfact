@@ -129,7 +129,11 @@ public:
 	return ret;
   }
 
-  static path_t read_path(const char* str) { return read_path(const_range_t(str)); }
+  static path_t read_path(const char* str)
+  {
+	const_range_t r(str);
+	return read_path(r);
+  }
 
 
   error_e find(const char* path, size_t len, node_t** found) const

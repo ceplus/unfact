@@ -27,6 +27,7 @@
 #define ONTREE_BASE_HPP
 
 #include <cassert>
+#include <cstddef>
 
 #define ONT_NAMESPACE_BEGIN namespace ontree {
 #define ONT_NAMESPACE_END   }
