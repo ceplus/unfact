@@ -88,7 +88,7 @@ public:
 	return node_cast<object_t>(m_node);
   }
 
-  array_t* to_areray() const
+  array_t* to_array() const
   {
 	assert(type_array == type());
 	return node_cast<array_t>(m_node);

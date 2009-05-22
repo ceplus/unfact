@@ -1,6 +1,7 @@
 
 #include <ontree/generator.hpp>
 #include <ontree/builder.hpp>
+#include <ontree/var.hpp> // for debug
 #include <vector>
 #include <string>
 
@@ -30,14 +31,20 @@ struct generator_tester_t
   generator_t m_generator;
 };
 
-static bool match_regenerated(const std::string& str)
+static bool match_regenerated(const std::string& str, size_t bufsize=1, bool willmatch=true)
 {
   error_e err = error_ok;
   tree_t tree;
   err = build_tree(&tree, str.c_str());
   assert(is_ok(err));
-  std::string regen = generate_string(tree, 1);
-  return str == regen;
+  std::string regen = generate_string(tree, bufsize);
+  bool match = (str == regen);
+  if (match != willmatch) {
+	fprintf(stderr, "does not match\n");
+	fprintf(stderr, "%s\n", regen.c_str());
+  }
+
+  return match;
 }
 
 void test_generator_hello()
@@ -130,10 +137,18 @@ void test_generator_regen()
   assert(match_regenerated("{\"foo\":{\"num\":1.5,\"str\":\"bar\",\"pred\":true,\"null\":null}}"));
 }
 
+// see http://github.com/ceplus/unfact/issues#issue/1
+void test_reproduce_issue_1()
+{
+  assert(match_regenerated("{\"foo\":[[0],[1]]}", 128));
+  assert(match_regenerated("{\"foo\":[{\"a\":1.5},{\"a\":2.5}]}"));
+}
+
 void test_generator()
 {
   test_generator_hello();
   test_generator_regen();
+  test_reproduce_issue_1();
 }
 
 /* -*-

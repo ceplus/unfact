@@ -14,7 +14,7 @@ env = Environment(CPPPATH=['.', '..', '../srclib/bdwgc/libatomic_ops-1.2/src/'],
 	          CPPFLAGS=["-Wextra", "-g"], LIBS=["pthread"])
 env.Append(BUILDERS = {'Test' :  Builder(action = builder_unit_test)})
 
-main = env.Program('main', Glob('../src/*.cpp') + Glob('./*.cpp') )
+main = env.Program('main', Glob('../src/*.cpp') + Glob('./*.cpp'), LINKFLAGS="-g")
 
 env.Test("test.passed", main)
 env.Alias("test", "test.passed")

@@ -62,22 +62,30 @@ public:
 	}
 
 	error_e err = error_ok;
+	range_t r;
+	ONT_WRITER_RETURN_UNLESS_OK(err, write_value_separator(m_buffer, &r, event_string));
+
 	switch (scope)
 	{
 	case scope_object:
-	  ONT_WRITER_RETURN_UNLESS_OK(err, write_char(m_buffer, &m_buffer, '{'));
+	  ONT_WRITER_RETURN_UNLESS_OK(err, write_char(r, &m_buffer, '{'));
 	  break;
 	case scope_array:
-	  ONT_WRITER_RETURN_UNLESS_OK(err, write_char(m_buffer, &m_buffer, '['));
+	  ONT_WRITER_RETURN_UNLESS_OK(err, write_char(r, &m_buffer, '['));
 	  break;
 	default:
 	  ONT_SHOULD_NOT_BE_REACHED();
 	  break;
 	}
 
-	ONT_WRITER_RETURN_UNLESS_OK(err, push_scope(scope));
-	m_last = (scope_object == scope) ? event_object_begin : event_array_begin;
+	countup();
+	err = push_scope(scope);
+	if (error_ok != err) {
+	  countdown();
+	  return err;
+	}
 
+	m_last = (scope_object == scope) ? event_object_begin : event_array_begin;
 	return error_ok;
   }
 
@@ -153,7 +161,7 @@ public:
 public: // export just for testing
   error_e write_value_separator(const range_t& from, range_t* to, event_e ev)
   {
-	if (!value_separator_requried(ev)) {
+	if (!value_separator_required(ev)) {
 	  *to = from;
 	  return error_ok;
 	}
@@ -170,9 +178,9 @@ public: // export just for testing
 			 event_object_key == m_last));
   }
 
-  bool value_separator_requried(event_e ev) const
+  bool value_separator_required(event_e ev) const
   {
-	if (0 == top_count()) {
+	if (0 == m_scope_depth || 0 == top_count()) {
 	  return false;
 	}
 
@@ -224,8 +232,17 @@ public: // export just for testing
 
   void countup()
   {
-	assert(0 < m_scope_depth);
-	m_scopes[m_scope_depth-1].m_count++;
+	if (0 < m_scope_depth) {
+	  m_scopes[m_scope_depth-1].m_count++;
+	}
+  }
+
+  void countdown()
+  {
+	if (0 < m_scope_depth) {
+	  assert(0 < m_scopes[m_scope_depth-1].m_count);
+	  m_scopes[m_scope_depth-1].m_count--;
+	}
   }
 
   static error_e write_value_literal(const range_t& from, range_t* to, real_t value)
