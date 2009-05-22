@@ -22,4 +22,7 @@ bool unfact_test_failed(const char* file, size_t line, const char* cond);
 #define UF_TEST_NOTEQ(a, b) (((a) != (b)) ||								\
                              unfact_test_failed(__FILE__, __LINE__, "<" #a "> is not <" #b ">!"))
 
+template<class T>
+inline void ignore_variable(const T& ) {}
+
 #endif//UNFACT_TEST_UNIT_HPP

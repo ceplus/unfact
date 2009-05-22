@@ -21,8 +21,8 @@ void test_static_string_hello()
   UF_TEST_EQUAL(empty.c_str(), std::string(""));
 }
 
-static
-void test_static_string_size()
+
+void __test_static_string_size()
 {
   my_static_string_t a("a");
   my_static_string_t empty("");

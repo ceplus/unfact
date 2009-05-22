@@ -361,7 +361,7 @@ public:
   template<class Iterator>
   const_child_iterator_t child_begin_for(Iterator parent) const { return child_begin_for(parent, synchronized_t()); }
   template<class Iterator, class Synchronized>
-  const_child_iterator_t child_end_for(Iterator parent, const Synchronized&) const { return const_child_iterator_t(0); }
+  const_child_iterator_t child_end_for(Iterator /*parent*/, const Synchronized&) const { return const_child_iterator_t(0); }
   template<class Iterator>
   const_child_iterator_t child_end_for(Iterator parent) const { return child_end_for(parent, synchronized_t()); }
 

@@ -11,7 +11,7 @@ def builder_unit_test(target, source, env):
 #                  LIBPATH=["c:\\Program Files\\Microsoft SDKs\\Windows\\v6.1\\Lib\\"],
 #                  CPPFLAGS=["/W4", "/EHsc"])
 env = Environment(CPPPATH=['.', '..', '../srclib/bdwgc/libatomic_ops-1.2/src/'], 
-	          CPPFLAGS=["-Wextra", "-g"], LIBS=["pthread"])
+	          CCFLAGS=["-Wall", "-Wextra", "-g"], LIBS=["pthread"])
 env.Append(BUILDERS = {'Test' :  Builder(action = builder_unit_test)})
 
 main = env.Program('main', Glob('../src/*.cpp') + Glob('./*.cpp'), LINKFLAGS="-g")

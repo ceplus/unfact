@@ -118,7 +118,6 @@ public:
 	  m_last = event_end;
 	  return;
 	} else {
-	  event_e next_event = event_end;
 	  switch (m_node->parent()->type()) {
 	  case type_object: {
 		member_t* next_member = member_t::unnode(m_node)->next();

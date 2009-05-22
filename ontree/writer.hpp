@@ -270,7 +270,7 @@ public: // export just for testing
 	return error_ok;
   }
 
-  static error_e write_value_literal(const range_t& from, range_t* to, const none_t& null)
+  static error_e write_value_literal(const range_t& from, range_t* to, const none_t& /*null*/)
   {
 	error_e err = error_ok;
 	ONT_WRITER_RETURN_UNLESS_OK(err, write_word(from, to, "null"));

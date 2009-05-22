@@ -21,6 +21,7 @@ void test_heap_tracer_hello()
   tracer_type::ticket_type t0 = t.root();
   tracer_type::ticket_type t1 = t.push(t0, "hello");
   tracer_type::ticket_type t2 = t.pop(t1);
+  ignore_variable(t2);
   t.name_of(t0);
   t.at(t0);
 

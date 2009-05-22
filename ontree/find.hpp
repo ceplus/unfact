@@ -166,6 +166,8 @@ public:
 	  case type_undefined:
 		*found = 0;
 		return error_ill_formed;
+	  default:
+		break;
 	  }
 
 	  left = p.left;

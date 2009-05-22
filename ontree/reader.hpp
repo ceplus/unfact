@@ -43,7 +43,7 @@ public:
   enum { scope_depth_limit = 32 };
 
   reader_t() 
-	: m_scope_depth(0), m_last(event_begin),
+	: m_last(event_begin), m_scope_depth(0), 
 	  m_number(0.0f), m_predicate(false)
   {}
 
@@ -216,7 +216,7 @@ public: // export for testing
 //                     %x72 /          ; r    carriage return U+000D
 //                     %x74 /          ; t    tab             U+0009
 //                     %x75 4HEXDIG )  ; uXXXX                U+XXXX
-//          escape = %x5C              ; \
+//          escape = %x5C              ; backslash
 
 	  char ch = r.at(n);
 	  if ('"' == ch) {
@@ -332,7 +332,7 @@ public: // export for testing
 	return err;
   }
 
-  error_e read_null(const const_range_t& from, const_range_t* to, bool* pred)
+  error_e read_null(const const_range_t& from, const_range_t* to, bool* /*pred*/)
   {
 	return read_word(from, to, "null");
   }

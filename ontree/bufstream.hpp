@@ -96,10 +96,10 @@ public:
   }
 
 private:
-  bool m_overflowed;
   char_type* m_buf;
   size_t     m_buflen;
   size_t     m_written;
+  bool m_overflowed;
 };
 
 class obufstream_t : 

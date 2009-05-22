@@ -309,7 +309,8 @@ count_escape_overhead(const char* str, size_t len)
 //                     %x72 /          ; r    carriage return U+000D
 //                     %x74 /          ; t    tab             U+0009
 //                     %x75 4HEXDIG )  ; uXXXX                U+XXXX
-//          escape = %x5C              ; \
+//          escape = %x5C              ; blackslash 
+//
 
   /*
    * we does not escape multibyte utf-8 characters for Japanese string debugability.

@@ -164,7 +164,7 @@ public:
 	  (reinterpret_cast<byte_t*>(node) - sizeof(member_t));		
   }
 
-  type_e node_type() const { node()->type(); }
+  type_e node_type() const { return node()->type(); }
 	
 private:
   text_t m_name;
@@ -224,7 +224,7 @@ public:
 	  (reinterpret_cast<byte_t*>(node) - sizeof(element_t));
   }
 
-  type_e node_type() const { node()->type(); }
+  type_e node_type() const { return node()->type(); }
 
 private:
   element_t* m_next;

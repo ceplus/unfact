@@ -5,6 +5,9 @@
 
 using namespace ontree;
 
+template<class T>
+inline void ignore_variable(const T& ) {}
+
 void test_zone_hello()
 {
   zone_t z;
@@ -12,6 +15,9 @@ void test_zone_hello()
   byte_t* p1 = z.allocate(20);
   byte_t* p2 = z.allocate(20);
   // we test nothing here... should check leakage.
+  ignore_variable(p0);
+  ignore_variable(p1);
+  ignore_variable(p2);
 }
 
 void test_zone_large_block()
@@ -20,6 +26,9 @@ void test_zone_large_block()
   byte_t* small  = z.allocate(64);
   byte_t* medium = z.allocate(100);
   byte_t* large  = z.allocate(200);
+  ignore_variable(small);
+  ignore_variable(medium);
+  ignore_variable(large);
 };
 
 void test_tree_hello()

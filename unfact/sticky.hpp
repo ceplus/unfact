@@ -120,11 +120,12 @@ public:
 	}
 	
 private:
+  const tracer_type* m_tracer;
 	char*  m_buf;
   size_t m_bufsize;
   iterator_type m_here;
   iterator_type m_end;
-  const tracer_type* m_tracer;
+
 };
 	
 UNFACT_NAMESPACE_END

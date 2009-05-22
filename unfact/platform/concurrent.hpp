@@ -39,11 +39,17 @@ template<class Platform>
 void yield_therad_k(size_t k);
 
 
-#pragma warning(push)
-#pragma warning(disable : 4312)
+#ifdef _WIN32
+# pragma warning(push)
+# pragma warning(disable : 4312)
+#endif
+
 template<class To, class From>
 inline To atomic_value_cast(From x) { return reinterpret_cast<To>(x); }
-#pragma warning(pop)
+
+#ifdef _WIN32
+# pragma warning(pop)
+#endif
 
 template<class AtomicOps>
 inline void advance(volatile typename AtomicOps::value_type* value, int delta)
@@ -197,9 +203,9 @@ class unsynchronized_t
 {
 public:
 	template<class Lock>
-	static void enter(const Lock& lock) {}
+	static void enter(const Lock& /*lock*/) {}
 	template<class Lock>
-	static void leave(const Lock& lock) {}
+	static void leave(const Lock& /*lock*/) {}
 };
 
 template<class Lock, class Synchronized=synchronized_t>

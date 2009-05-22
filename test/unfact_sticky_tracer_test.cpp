@@ -42,6 +42,7 @@ void test_tick_ops_hello()
   ops_type::value_type y = ops_type::tick();
   ops_type::delta_type d = ops_type::distance(x, y);
   float ms = ops_type::to_milliseconds(d);
+  ignore_variable(ms);
 }
 
 void test_tick_tracer_hello()
