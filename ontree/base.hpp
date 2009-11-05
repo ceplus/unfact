@@ -51,8 +51,13 @@ enum error_e
 inline bool is_ok(error_e err) { return err == error_ok; }
 
 typedef unsigned char byte_t;
-typedef float real_t;
 class none_t {};
+
+#ifdef ONT_CONFIG_USE_DOUBLE_REAL
+typedef double real_t;
+#else
+typedef float  real_t;
+#endif
 
 /*
  * copied from unfact 

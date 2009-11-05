@@ -14,9 +14,11 @@ env = Environment(CPPPATH=['.', '..', '../srclib/bdwgc/libatomic_ops-1.2/src/'],
 	          CCFLAGS=["-Wall", "-Wextra", "-g"], LIBS=["pthread"])
 env.Append(BUILDERS = {'Test' :  Builder(action = builder_unit_test)})
 
-main = env.Program('main', Glob('../src/*.cpp') + Glob('./*.cpp'), LINKFLAGS="-g")
+main  = env.Program('main', Glob('../src/*.cpp') + Glob('./*.cpp'), LINKFLAGS="-g")
+maind = env.Program('maind', Glob('../src/*.cpp') + Glob('./*.cpp'), LINKFLAGS="-g",
+                    CPPFLAGS="-DONT_CONFIG_USE_DOUBLE_REAL", OBJPREFIX="d")
 
 env.Test("test.passed", main)
-env.Alias("test", "test.passed")
+env.Test("testd.passed", maind)
+env.Alias("test", ["test.passed", "testd.passed"])
 
-      

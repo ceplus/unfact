@@ -1,5 +1,6 @@
 
 #include <ontree/reader.hpp>
+#include <iostream> // for debug
 
 using namespace ontree;
 
@@ -125,6 +126,15 @@ void test_reader_object_value_number()
   assert(is_ok(r0.read()));
   assert(event_object_end == r0.last());
   assert(r0.buffer().size() == 0);
+
+  reader_t r1;
+  r1.set_buffer("{\"foo\": 1000000003}");
+  test_helper_read_until_key(&r1, "foo");
+  assert(is_ok(r1.read()));
+  assert(event_number == r1.last());
+#ifdef ONT_CONFIG_USE_DOUBLE_REAL
+  assert(int(r1.number()) == 1000000003);
+#endif
 }
 
 void test_reader_object_value_null()
@@ -423,6 +433,7 @@ void test_read_ok_list()
 {
   test_read_ok("{\"foo\":\n\"bar\"}");
 }
+
 
 void test_reader()
 {
